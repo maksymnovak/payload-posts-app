@@ -1,6 +1,4 @@
-'use client'
-
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { getPosts } from '@/server/actions/createPost'
 
 type Post = {
@@ -13,25 +11,9 @@ type Post = {
   createdAt: string
 }
 
-export default function PostsList() {
-  const [posts, setPosts] = useState<Post[]>([])
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    const fetchPosts = async () => {
-      const result = await getPosts()
-      if (result.success && result.posts) {
-        setPosts(result.posts as Post[])
-      }
-      setLoading(false)
-    }
-
-    fetchPosts()
-  }, [])
-
-  if (loading) {
-    return <div>Loading posts...</div>
-  }
+export default async function PostsList() {
+  const result = await getPosts()
+  const posts = (result.success && result.posts ? result.posts : []) as Post[]
 
   if (posts.length === 0) {
     return <div style={{ color: '#888' }}>No posts yet. Create your first post above!</div>
@@ -43,10 +25,16 @@ export default function PostsList() {
         <div key={post.id} className="post-item">
           <div className="post-title">{post.title}</div>
           <div className="post-meta">
-            Slug: {post.slug} | Created: {new Date(post.createdAt).toLocaleDateString()}
+            by {post.owner?.name || 'Unknown'} | Created: {new Date(post.createdAt).toLocaleDateString('en-US', { 
+              month: 'long', 
+              day: 'numeric', 
+              year: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit'
+            })}
           </div>
           {post.categories && post.categories.length > 0 && (
-            <div style={{ marginTop: '0.5rem' }}>
+            <div style={{ marginTop: '0.5rem', marginBottom: '0.5rem' }}>
               {post.categories.map((cat: any) => (
                 <span key={cat.id} className="category-tag">
                   {cat.title || 'Category'}

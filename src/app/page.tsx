@@ -29,6 +29,7 @@ export default async function Home() {
 
       {user && (
         <div className="card">
+          <h2 style={{ marginBottom: '1.5rem' }}>Recent Posts</h2>
           <PostsList />
         </div>
       )}

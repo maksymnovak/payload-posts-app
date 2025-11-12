@@ -58,10 +58,22 @@ export default function PostForm() {
         setTitle("");
         setContent("");
         setSelectedCategories([]);
-        // Reload the page to show the new post
+        setSearchQuery("");
+        setIsDropdownOpen(false);
+        
+        // Smooth refresh without full page reload
         setTimeout(() => {
-          window.location.reload();
-        }, 1000);
+          setSuccess("");
+          router.refresh();
+          
+          // Smooth scroll to posts section after refresh
+          setTimeout(() => {
+            const postsSection = document.querySelector('.posts-list');
+            if (postsSection) {
+              postsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          }, 100);
+        }, 800);
       } else {
         setError(result.error || "Failed to create post");
       }
