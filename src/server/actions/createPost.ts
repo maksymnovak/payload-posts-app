@@ -1,0 +1,88 @@
+'use server'
+
+import { getPayload } from 'payload'
+import config from '@/payload.config'
+import { cookies } from 'next/headers'
+import { revalidatePath } from 'next/cache'
+
+export async function createPost(formData: {
+  title: string
+  slug: string
+  content: string
+  categories?: string[]
+}) {
+  try {
+    const payload = await getPayload({ config })
+    const cookieStore = await cookies()
+    const token = cookieStore.get('payload-token')?.value
+
+    if (!token) {
+      return {
+        success: false,
+        error: 'Not authenticated',
+      }
+    }
+
+    // Get current user
+    const user = await payload.auth({ headers: { Authorization: `JWT ${token}` } })
+    
+    if (!user.user) {
+      return {
+        success: false,
+        error: 'Not authenticated',
+      }
+    }
+
+    // Create the post
+    const post = await payload.create({
+      collection: 'posts',
+      data: {
+        title: formData.title,
+        slug: formData.slug,
+        content: formData.content,
+        categories: formData.categories || [],
+        owner: user.user.id,
+      },
+    })
+
+    // Revalidate the page to show new post
+    revalidatePath('/')
+
+    return {
+      success: true,
+      post,
+    }
+  } catch (error: any) {
+    console.error('Create post error:', error)
+    return {
+      success: false,
+      error: error.message || 'Failed to create post',
+    }
+  }
+}
+
+export async function getPosts() {
+  try {
+    const payload = await getPayload({ config })
+    
+    const posts = await payload.find({
+      collection: 'posts',
+      depth: 2,
+      limit: 20,
+      sort: '-createdAt',
+    })
+
+    return {
+      success: true,
+      posts: posts.docs,
+    }
+  } catch (error: any) {
+    console.error('Get posts error:', error)
+    return {
+      success: false,
+      error: error.message || 'Failed to get posts',
+      posts: [],
+    }
+  }
+}
+

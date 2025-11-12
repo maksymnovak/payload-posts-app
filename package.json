@@ -1,0 +1,34 @@
+{
+  "name": "payload-posts-app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev",
+    "build": "cross-env NODE_OPTIONS=--no-deprecation next build",
+    "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
+    "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
+    "generate:types": "payload generate:types"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@payloadcms/db-mongodb": "^3.63.0",
+    "@payloadcms/next": "^3.63.0",
+    "@payloadcms/richtext-lexical": "^3.63.0",
+    "cross-env": "^7.0.3",
+    "graphql": "^16.9.0",
+    "next": "^15.0.3",
+    "payload": "^3.63.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "sharp": "^0.33.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22.19.1",
+    "@types/react": "^19.2.3",
+    "@types/react-dom": "^19.2.3",
+    "typescript": "^5.9.3"
+  }
+}
