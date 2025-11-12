@@ -124,13 +124,6 @@ export default function CategoryDropdown({
                   padding: '0.75rem 1rem',
                   cursor: 'pointer',
                   borderBottom: '1px solid #333',
-                  transition: 'background 0.2s',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = '#333'
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'transparent'
                 }}
               >
                 <input
