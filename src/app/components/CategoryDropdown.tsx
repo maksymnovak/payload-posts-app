@@ -51,69 +51,72 @@ export default function CategoryDropdown({
   )
 
   return (
-    <div ref={dropdownRef} style={{ position: 'relative' }}>
+    <div ref={dropdownRef} style={{ position: "relative" }}>
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         style={{
-          width: '100%',
-          padding: '0.75rem 1rem',
-          border: '1px solid #444',
-          borderRadius: '8px',
-          background: '#2a2a2a',
-          color: '#fff',
-          textAlign: 'left',
-          cursor: 'pointer',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
+          width: "100%",
+          padding: "0.75rem 1rem",
+          border: "1px solid #444",
+          borderRadius: "8px",
+          background: "#2a2a2a",
+          color: "#fff",
+          cursor: "pointer",
+          textAlign: "left",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          transition: "none",
+          transform: "none",
+          boxShadow: "none",
         }}
       >
         <span>
           {selectedCategories.length > 0
             ? `${selectedCategories.length} selected`
-            : 'Select categories'}
+            : "Select categories"}
         </span>
-        <span>{isOpen ? '▲' : '▼'}</span>
+        <span>{isOpen ? "▲" : "▼"}</span>
       </button>
 
       {isOpen && (
         <div
           style={{
-            position: 'absolute',
-            top: '100%',
+            position: "absolute",
+            top: "100%",
             left: 0,
             right: 0,
-            marginTop: '0.5rem',
-            background: '#2a2a2a',
-            border: '1px solid #444',
-            borderRadius: '8px',
-            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.3)',
+            marginTop: "0.5rem",
+            background: "#2a2a2a",
+            border: "1px solid #444",
+            borderRadius: "8px",
+            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.3)",
             zIndex: 10,
-            maxHeight: '250px',
-            overflow: 'hidden',
-            display: 'flex',
-            flexDirection: 'column',
+            maxHeight: "250px",
+            overflow: "hidden",
+            display: "flex",
+            flexDirection: "column",
           }}
         >
-          <div style={{ padding: '0.75rem' }}>
+          <div style={{ padding: "0.75rem" }}>
             <input
               type="text"
               placeholder="🔍 Search items..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               style={{
-                width: '100%',
-                padding: '0.5rem',
-                border: '1px solid #444',
-                borderRadius: '6px',
-                background: '#1a1a1a',
-                color: '#fff',
+                width: "100%",
+                padding: "0.5rem",
+                border: "1px solid #444",
+                borderRadius: "6px",
+                background: "#1a1a1a",
+                color: "#fff",
               }}
             />
           </div>
 
-          <div style={{ overflowY: 'auto', flex: 1 }}>
+          <div style={{ overflowY: "auto", flex: 1 }}>
             {filteredCategories.map((cat) => (
               <label
                 key={cat.id}
@@ -122,8 +125,8 @@ export default function CategoryDropdown({
                   alignItems: 'center',
                   gap: '0.75rem',
                   padding: '0.75rem 1rem',
-                  cursor: 'pointer',
                   borderBottom: '1px solid #333',
+                  cursor: 'default',
                 }}
               >
                 <input
@@ -133,16 +136,16 @@ export default function CategoryDropdown({
                   style={{
                     width: '18px',
                     height: '18px',
-                    cursor: 'pointer',
+                    cursor: 'default',
                   }}
                 />
-                <span style={{ color: '#fff' }}>{cat.title}</span>
+                <span style={{ color: "#fff" }}>{cat.title}</span>
               </label>
             ))}
           </div>
         </div>
       )}
     </div>
-  )
+  );
 }
 
