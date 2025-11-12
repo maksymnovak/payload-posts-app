@@ -1,4 +1,5 @@
 import React from 'react'
+import styles from './PostItem.module.css'
 
 type Category = {
   id: string
@@ -24,8 +25,8 @@ export default function PostItem({ title, content, owner, categories, createdAt 
 
   return (
     <div className="post-item">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '1rem' }}>
-        <div style={{ flex: 1 }}>
+      <div className={styles.wrapper}>
+        <div className={styles.content}>
           <div className="post-title">{title}</div>
           <div className="post-meta">
             by {owner?.name || 'Unknown'} | Created: {formattedDate}
@@ -34,7 +35,7 @@ export default function PostItem({ title, content, owner, categories, createdAt 
         </div>
 
         {categories && categories.length > 0 && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', alignItems: 'flex-end' }}>
+          <div className={styles.categories}>
             {categories.map((cat) => (
               <span key={cat.id} className="category-tag">
                 {cat.title || 'Category'}
@@ -46,4 +47,3 @@ export default function PostItem({ title, content, owner, categories, createdAt 
     </div>
   )
 }
-

@@ -1,8 +1,8 @@
 'use client'
 
 import React, { useState } from 'react'
-import { authorizeUser } from '@/server/actions/authorizeUser'
 import { useRouter } from 'next/navigation'
+import { authorizeUser } from '@/server/actions/authorizeUser'
 
 export default function LoginForm() {
   const [email, setEmail] = useState('')

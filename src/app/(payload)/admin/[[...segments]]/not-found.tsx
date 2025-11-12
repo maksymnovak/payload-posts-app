@@ -14,18 +14,21 @@ const normalizeSearchParams = (
   return Object.fromEntries(entries) as Record<string, string | string[]>
 }
 
-export default function AdminNotFound({
+export default async function AdminNotFound({
   params,
   searchParams,
 }: {
-  params: { segments?: string[] }
-  searchParams: Record<string, string | string[] | undefined>
+  params: Promise<{ segments?: string[] }>
+  searchParams: Promise<Record<string, string | string[] | undefined>>
 }) {
+  const resolvedParams = await params
+  const resolvedSearchParams = await searchParams
+
   return NotFoundPage({
     config: Promise.resolve(config),
     importMap,
-    params: Promise.resolve(normalizeParams(params)),
-    searchParams: Promise.resolve(normalizeSearchParams(searchParams)),
+    params: Promise.resolve(normalizeParams(resolvedParams)),
+    searchParams: Promise.resolve(normalizeSearchParams(resolvedSearchParams)),
   })
 }
 

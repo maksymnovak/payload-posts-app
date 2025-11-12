@@ -1,11 +1,12 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { createPost } from '@/server/actions/createPost'
 import { getCategories } from '@/server/actions/getCategories'
-import { useRouter } from 'next/navigation'
 import { logoutUser } from '@/server/actions/authorizeUser'
-import CategoryDropdown from './CategoryDropdown'
+import CategoryDropdown from '../CategoryDropdown'
+import styles from './PostForm.module.css'
 
 type Category = {
   id: string
@@ -29,6 +30,7 @@ export default function PostForm() {
         setCategories(result.categories as Category[])
       }
     }
+
     fetchCategories()
   }, [])
 
@@ -39,14 +41,8 @@ export default function PostForm() {
     setLoading(true)
 
     try {
-      const slug = title
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/(^-|-$)/g, '')
-
       const result = await createPost({
         title,
-        slug,
         content,
         categories: selectedCategories,
       })
@@ -88,9 +84,8 @@ export default function PostForm() {
       <div className="header">
         <button
           type="button"
-          className="button-secondary"
+          className={styles.logoutButton}
           onClick={handleLogout}
-          style={{ marginLeft: 'auto' }}
         >
           Logout
         </button>
