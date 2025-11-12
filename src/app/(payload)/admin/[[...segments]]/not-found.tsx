@@ -1,7 +1,31 @@
-import { NotFound } from '@payloadcms/next/views'
+import { NotFoundPage } from '@payloadcms/next/views'
+import { importMap } from '@/importMap'
 import config from '@/payload.config'
 
-const NotFoundPage = () => <NotFound config={config} />
+const normalizeParams = (params: { segments?: string[] }) => ({
+  segments: params?.segments ?? [],
+})
 
-export default NotFoundPage
+const normalizeSearchParams = (
+  searchParams: Record<string, string | string[] | undefined>,
+): Record<string, string | string[]> => {
+  const entries = Object.entries(searchParams ?? {}).filter(([, value]) => value !== undefined)
+
+  return Object.fromEntries(entries) as Record<string, string | string[]>
+}
+
+export default function AdminNotFound({
+  params,
+  searchParams,
+}: {
+  params: { segments?: string[] }
+  searchParams: Record<string, string | string[] | undefined>
+}) {
+  return NotFoundPage({
+    config: Promise.resolve(config),
+    importMap,
+    params: Promise.resolve(normalizeParams(params)),
+    searchParams: Promise.resolve(normalizeSearchParams(searchParams)),
+  })
+}
 

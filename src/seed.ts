@@ -1,7 +1,6 @@
 import type { Payload } from 'payload'
 
 export const seed = async (payload: Payload): Promise<void> => {
-  // Check if test user already exists
   const existingUser = await payload.find({
     collection: 'users',
     where: {
@@ -13,10 +12,8 @@ export const seed = async (payload: Payload): Promise<void> => {
 
   let testUser
   if (existingUser.docs.length > 0) {
-    console.log('Test user already exists')
     testUser = existingUser.docs[0]
   } else {
-    // Create test user
     testUser = await payload.create({
       collection: 'users',
       data: {
@@ -25,10 +22,8 @@ export const seed = async (payload: Payload): Promise<void> => {
         name: 'test',
       },
     })
-    console.log('Test user created successfully')
   }
 
-  // Create sample categories
   const existingCategories = await payload.find({
     collection: 'categories',
     limit: 1,
@@ -64,8 +59,5 @@ export const seed = async (payload: Payload): Promise<void> => {
         owner: testUser.id,
       },
     })
-
-    console.log('Sample categories created')
   }
 }
-

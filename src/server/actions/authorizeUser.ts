@@ -43,7 +43,6 @@ export async function authorizeUser(email: string, password: string) {
       error: 'Invalid credentials',
     }
   } catch (error: any) {
-    console.error('Authorization error:', error)
     return {
       success: false,
       error: error.message || 'Authentication failed',
@@ -76,7 +75,6 @@ export async function getCurrentUser() {
       throw error
     }
   } catch (error) {
-    console.error('Get current user error:', error)
     return null
   }
 }

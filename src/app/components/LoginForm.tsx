@@ -18,9 +18,8 @@ export default function LoginForm() {
 
     try {
       const result = await authorizeUser(email, password)
-      
+
       if (result.success) {
-        // Force a full page reload to ensure user state is updated
         window.location.href = '/'
       } else {
         setError(result.error || 'Login failed')
@@ -41,7 +40,7 @@ export default function LoginForm() {
           id="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="test@test.com"
+          placeholder="Enter your email"
           required
         />
       </div>
@@ -53,7 +52,7 @@ export default function LoginForm() {
           id="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="test"
+          placeholder="Enter your password"
           required
         />
       </div>
@@ -63,11 +62,6 @@ export default function LoginForm() {
       <button type="submit" disabled={loading}>
         {loading ? 'Logging in...' : 'Login'}
       </button>
-
-      <p style={{ marginTop: '1rem', color: '#888', fontSize: '0.9rem' }}>
-        Test credentials: test@test.com / test
-      </p>
     </form>
   )
 }
-

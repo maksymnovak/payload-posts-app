@@ -23,7 +23,6 @@ export async function createPost(formData: {
       }
     }
 
-    // Create the post
     const post = await payload.create({
       collection: 'posts',
       data: {
@@ -35,7 +34,6 @@ export async function createPost(formData: {
       },
     })
 
-    // Revalidate the page to show new post
     revalidatePath('/')
 
     return {
@@ -43,7 +41,6 @@ export async function createPost(formData: {
       post,
     }
   } catch (error: any) {
-    console.error('Create post error:', error)
     return {
       success: false,
       error: error.message || 'Failed to create post',
@@ -54,7 +51,7 @@ export async function createPost(formData: {
 export async function getPosts() {
   try {
     const payload = await getPayload({ config })
-    
+
     const posts = await payload.find({
       collection: 'posts',
       depth: 2,
@@ -67,7 +64,6 @@ export async function getPosts() {
       posts: posts.docs,
     }
   } catch (error: any) {
-    console.error('Get posts error:', error)
     return {
       success: false,
       error: error.message || 'Failed to get posts',
@@ -75,4 +71,3 @@ export async function getPosts() {
     }
   }
 }
-
