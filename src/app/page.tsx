@@ -4,20 +4,23 @@ import LoginForm from './components/LoginForm'
 import PostForm from './components/PostForm'
 import PostsList from './components/PostsList'
 
+// Disable caching for this page
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export default async function Home() {
   const user = await getCurrentUser()
 
   return (
     <div className="container">
       <div className="card">
-        <h1>Payload Posts App</h1>
-        
         {!user ? (
           <LoginForm />
         ) : (
           <>
-            <div className="welcome">
-              Здравствуйте {user.name || user.email}
+            <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+              <h1>Hello, {user.name || user.email}!</h1>
+              <p style={{ color: '#888', marginTop: '0.5rem' }}>Create a new post</p>
             </div>
             <PostForm />
           </>
@@ -26,7 +29,6 @@ export default async function Home() {
 
       {user && (
         <div className="card">
-          <h2>Recent Posts</h2>
           <PostsList />
         </div>
       )}

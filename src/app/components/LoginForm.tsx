@@ -20,7 +20,8 @@ export default function LoginForm() {
       const result = await authorizeUser(email, password)
       
       if (result.success) {
-        router.refresh()
+        // Force a full page reload to ensure user state is updated
+        window.location.href = '/'
       } else {
         setError(result.error || 'Login failed')
       }

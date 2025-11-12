@@ -14,19 +14,9 @@ export async function createPost(formData: {
   try {
     const payload = await getPayload({ config })
     const cookieStore = await cookies()
-    const token = cookieStore.get('payload-token')?.value
+    const userId = cookieStore.get('user-id')?.value
 
-    if (!token) {
-      return {
-        success: false,
-        error: 'Not authenticated',
-      }
-    }
-
-    // Get current user
-    const user = await payload.auth({ headers: { Authorization: `JWT ${token}` } })
-    
-    if (!user.user) {
+    if (!userId) {
       return {
         success: false,
         error: 'Not authenticated',
@@ -41,7 +31,7 @@ export async function createPost(formData: {
         slug: formData.slug,
         content: formData.content,
         categories: formData.categories || [],
-        owner: user.user.id,
+        owner: userId,
       },
     })
 
