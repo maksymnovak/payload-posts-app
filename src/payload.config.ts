@@ -8,6 +8,7 @@ import { fileURLToPath } from 'url'
 import { Users } from './collections/Users'
 import { Posts } from './collections/Posts'
 import { Categories } from './collections/Categories'
+import { seed } from './seed'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -30,5 +31,8 @@ export default buildConfig({
   }),
   sharp,
   plugins: [],
+  onInit: async (payload) => {
+    await seed(payload)
+  },
 })
 
