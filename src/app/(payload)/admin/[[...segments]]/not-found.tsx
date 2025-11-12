@@ -1,5 +1,5 @@
 import { NotFoundPage } from '@payloadcms/next/views'
-import { importMap } from '@/importMap'
+import { importMap } from '@/app/(payload)/admin/importMap'
 import config from '@/payload.config'
 
 const normalizeParams = (params: { segments?: string[] }) => ({
