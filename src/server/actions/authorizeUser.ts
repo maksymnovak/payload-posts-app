@@ -25,7 +25,7 @@ export async function authorizeUser(email: string, password: string) {
         maxAge: 60 * 60 * 24 * 7,
       })
 
-      cookieStore.set('user-id', result.user.id, {
+      cookieStore.set('user-id', String(result.user.id), {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'lax',

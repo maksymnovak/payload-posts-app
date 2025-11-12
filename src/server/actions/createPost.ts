@@ -5,12 +5,44 @@ import config from '@/payload.config'
 import { cookies } from 'next/headers'
 import { revalidatePath } from 'next/cache'
 
-export async function createPost(formData: {
+type CreatePostInput = {
   title: string
-  slug: string
   content: string
   categories?: string[]
-}) {
+}
+
+const slugify = (value: string) =>
+  value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '')
+    .replace(/-{2,}/g, '-')
+
+const generateUniqueSlug = async (payload: Awaited<ReturnType<typeof getPayload>>, title: string) => {
+  const baseSlug = slugify(title) || `post-${Date.now()}`
+  let slug = baseSlug
+  let suffix = 1
+
+  while (true) {
+    const existing = await payload.find({
+      collection: 'posts',
+      where: {
+        slug: {
+          equals: slug,
+        },
+      },
+      limit: 1,
+    })
+
+    if (existing.docs.length === 0) {
+      return slug
+    }
+
+    slug = `${baseSlug}-${suffix++}`
+  }
+}
+
+export async function createPost(formData: CreatePostInput) {
   try {
     const payload = await getPayload({ config })
     const cookieStore = await cookies()
@@ -23,11 +55,13 @@ export async function createPost(formData: {
       }
     }
 
+    const slug = await generateUniqueSlug(payload, formData.title)
+
     const post = await payload.create({
       collection: 'posts',
       data: {
         title: formData.title,
-        slug: formData.slug,
+        slug,
         content: formData.content,
         categories: formData.categories || [],
         owner: userId,

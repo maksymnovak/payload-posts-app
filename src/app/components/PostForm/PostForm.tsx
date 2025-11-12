@@ -1,16 +1,19 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { createPost } from '@/server/actions/createPost'
 import { getCategories } from '@/server/actions/getCategories'
-import { useRouter } from 'next/navigation'
 import { logoutUser } from '@/server/actions/authorizeUser'
-import CategoryDropdown from './CategoryDropdown'
+import CategoryDropdown from '../CategoryDropdown'
 
 type Category = {
   id: string
   title: string
 }
+
+const inputClasses =
+  'w-full rounded-lg border border-zinc-700 bg-zinc-950/60 px-4 py-3 text-sm text-zinc-100 placeholder:text-zinc-500 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/40'
 
 export default function PostForm() {
   const [title, setTitle] = useState('')
@@ -29,6 +32,7 @@ export default function PostForm() {
         setCategories(result.categories as Category[])
       }
     }
+
     fetchCategories()
   }, [])
 
@@ -39,14 +43,8 @@ export default function PostForm() {
     setLoading(true)
 
     try {
-      const slug = title
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/(^-|-$)/g, '')
-
       const result = await createPost({
         title,
-        slug,
         content,
         categories: selectedCategories,
       })
@@ -85,43 +83,48 @@ export default function PostForm() {
 
   return (
     <>
-      <div className="header">
+      <div className="mb-8 flex items-center justify-end">
         <button
           type="button"
-          className="button-secondary"
           onClick={handleLogout}
-          style={{ marginLeft: 'auto' }}
+          className="inline-flex items-center justify-center rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs font-medium text-zinc-200 transition hover:border-white/30 hover:bg-white/10"
         >
           Logout
         </button>
       </div>
 
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="title">Title</label>
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="space-y-2">
+          <label htmlFor="title" className="block text-sm font-medium text-zinc-300">
+            Title
+          </label>
           <input
             type="text"
             id="title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Enter post title"
+            className={inputClasses}
             required
           />
         </div>
 
-        <div className="form-group">
-          <label htmlFor="content">Content</label>
+        <div className="space-y-2">
+          <label htmlFor="content" className="block text-sm font-medium text-zinc-300">
+            Content
+          </label>
           <textarea
             id="content"
             value={content}
             onChange={(e) => setContent(e.target.value)}
             placeholder="Enter post content"
+            className={`${inputClasses} min-h-[140px] resize-vertical`}
             required
           />
         </div>
 
-        <div className="form-group">
-          <label>Categories</label>
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-zinc-300">Categories</label>
           <CategoryDropdown
             categories={categories}
             selectedCategories={selectedCategories}
@@ -129,10 +132,23 @@ export default function PostForm() {
           />
         </div>
 
-        {error && <div className="error">{error}</div>}
-        {success && <div className="success">{success}</div>}
+        {error && (
+          <div className="rounded-lg border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-300">
+            {error}
+          </div>
+        )}
 
-        <button type="submit" disabled={loading}>
+        {success && (
+          <div className="rounded-lg border border-emerald-500/40 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-300">
+            {success}
+          </div>
+        )}
+
+        <button
+          type="submit"
+          disabled={loading}
+          className="inline-flex w-full items-center justify-center rounded-lg bg-gradient-to-r from-indigo-500 via-purple-500 to-violet-500 px-4 py-3 text-sm font-semibold shadow-lg shadow-indigo-500/30 transition hover:shadow-indigo-500/50 disabled:cursor-not-allowed disabled:opacity-60"
+        >
           {loading ? 'Creating...' : 'Create Post'}
         </button>
       </form>
