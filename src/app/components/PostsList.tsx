@@ -1,13 +1,19 @@
 import React from 'react'
 import { getPosts } from '@/server/actions/createPost'
+import PostItem from './PostItem'
+
+type Category = {
+  id: string
+  title: string
+}
 
 type Post = {
   id: string
   title: string
   slug: string
   content: string
-  owner: any
-  categories: any[]
+  owner: { name?: string } | null
+  categories: Category[]
   createdAt: string
 }
 
@@ -22,30 +28,15 @@ export default async function PostsList() {
   return (
     <div className="posts-list">
       {posts.map((post) => (
-        <div key={post.id} className="post-item">
-          <div className="post-title">{post.title}</div>
-          <div className="post-meta">
-            by {post.owner?.name || 'Unknown'} | Created: {new Date(post.createdAt).toLocaleDateString('en-US', { 
-              month: 'long', 
-              day: 'numeric', 
-              year: 'numeric',
-              hour: '2-digit',
-              minute: '2-digit'
-            })}
-          </div>
-          {post.categories && post.categories.length > 0 && (
-            <div style={{ marginTop: '0.5rem', marginBottom: '0.5rem' }}>
-              {post.categories.map((cat: any) => (
-                <span key={cat.id} className="category-tag">
-                  {cat.title || 'Category'}
-                </span>
-              ))}
-            </div>
-          )}
-          <div className="post-content">{post.content}</div>
-        </div>
+        <PostItem
+          key={post.id}
+          title={post.title}
+          content={post.content}
+          owner={post.owner}
+          categories={post.categories}
+          createdAt={post.createdAt}
+        />
       ))}
     </div>
   )
 }
-

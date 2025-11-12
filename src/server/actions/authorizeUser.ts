@@ -7,7 +7,7 @@ import { cookies } from 'next/headers'
 export async function authorizeUser(email: string, password: string) {
   try {
     const payload = await getPayload({ config })
-    
+
     const result = await payload.login({
       collection: 'users',
       data: {
@@ -17,20 +17,19 @@ export async function authorizeUser(email: string, password: string) {
     })
 
     if (result.token && result.user) {
-      // Store both token and user ID in cookies
       const cookieStore = await cookies()
       cookieStore.set('payload-token', result.token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'lax',
-        maxAge: 60 * 60 * 24 * 7, // 7 days
+        maxAge: 60 * 60 * 24 * 7,
       })
-      
+
       cookieStore.set('user-id', result.user.id, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'lax',
-        maxAge: 60 * 60 * 24 * 7, // 7 days
+        maxAge: 60 * 60 * 24 * 7,
       })
 
       return {
@@ -63,7 +62,6 @@ export async function getCurrentUser() {
     }
 
     try {
-      // Get the user directly by ID
       const user = await payload.findByID({
         collection: 'users',
         id: userId,
@@ -71,8 +69,6 @@ export async function getCurrentUser() {
 
       return user
     } catch (error: any) {
-      // If the user is not found (stale cookie), just return null
-      // Cookies will be cleared on next login
       if (error?.status === 404) {
         return null
       }
@@ -91,4 +87,3 @@ export async function logoutUser() {
   cookieStore.delete('user-id')
   return { success: true }
 }
-
