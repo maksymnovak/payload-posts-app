@@ -1,8 +1,8 @@
 import React from 'react'
-import { getCurrentUser } from '@/server/actions/authorizeUser'
-import LoginForm from './components/LoginForm'
-import PostForm from './components/PostForm'
-import PostsList from './components/PostsList'
+import { getCurrentUser } from "@/server/actions/authorizeUser";
+import PostForm from "./components/PostForm";
+import PostsList from "./components/PostsList";
+import LoginForm from "./components/LoginForm";
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
